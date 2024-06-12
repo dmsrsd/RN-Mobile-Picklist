@@ -3,25 +3,46 @@ import {
   View,
   Text,
   ActivityIndicator,
-  FlatList,
-  ScrollView,
+  ToastAndroid,
+  BackHandler,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPosts } from "../Redux/actions";
 
-const HomeScreen = ({ route }) => {
+const HomeScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts.posts);
   const loading = useSelector((state) => state.posts.loading);
   const error = useSelector((state) => state.posts.error);
 
+  // Data Salesman From Login
   const { data_salesman } = route.params || {};
+
   // Destructuring the data_salesman object to get salesman_code and salesman_name
   const { salesman_code, salesman_name, mobile } = data_salesman || {};
 
   useEffect(() => {
     dispatch(fetchPosts());
+    showToastWithGravity();
+
+    const backAction = () => {
+      return true; // Disable back button if already Login
+    };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
   }, [dispatch]);
+
+  const showToastWithGravity = () => {
+    ToastAndroid.showWithGravity(
+      `Selamat Datang, ${salesman_name}!`,
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER
+    );
+  };
 
   if (loading) {
     return (

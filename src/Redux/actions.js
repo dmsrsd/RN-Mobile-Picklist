@@ -26,11 +26,11 @@ export const loginPosts = createAsyncThunk("login", async (body) => {
 });
 
 export const getDataSalesman = createAsyncThunk( "getSalesman", async (phoneNum) => {
-    // let API = "http://192.168.150.163/platforma/data/get-data-salesman/" + phoneNum;
+    let API = `http://192.168.150.163/platforma/data/get-data-salesman/${phoneNum}`;
     // console.log("API", API);
     try {
-      const response = await axios.get("http://192.168.150.163/platforma/data/get-data-salesman/" + phoneNum);
-      console.log("res_get_salesman", response.data);
+      const response = await axios.get(API);
+      // console.log("res_get_salesman", response.data);
       return response.data;
     } catch (error) {
       console.error("Error:", error);
